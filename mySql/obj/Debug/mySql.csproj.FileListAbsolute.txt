@@ -1,0 +1,7 @@
+c:\users\nkosana\source\repos\mySql\mySql\bin\Debug\mySql.exe.config
+c:\users\nkosana\source\repos\mySql\mySql\bin\Debug\mySql.exe
+c:\users\nkosana\source\repos\mySql\mySql\bin\Debug\mySql.pdb
+c:\users\nkosana\source\repos\mySql\mySql\obj\Debug\mySql.csprojAssemblyReference.cache
+c:\users\nkosana\source\repos\mySql\mySql\obj\Debug\mySql.csproj.CoreCompileInputs.cache
+c:\users\nkosana\source\repos\mySql\mySql\obj\Debug\mySql.exe
+c:\users\nkosana\source\repos\mySql\mySql\obj\Debug\mySql.pdb
