@@ -1,0 +1,195 @@
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace chili.Desktop.Helpers
+{
+    public static class Utils
+    {
+        private static readonly string ConnStr = @"Data Source=SAINTDEV;Initial Catalog=PPE;Persist Security Info=True;User ID=sa;Password=secret@2011";
+
+
+
+        public static bool Execute(string sql, Dictionary<string, object> paramList,
+            bool debugging = false)
+        {
+            if (debugging)
+            {
+                string m = "";
+                if (paramList != null)
+                {
+                    foreach (var k in paramList)
+                    {
+                        m += $"{k.Key} - {k.Value} \r\n";
+                    }
+                }
+            }
+
+            using (SqlConnection connection = new SqlConnection(ConnStr))
+            {
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                using (var cmd = connection.CreateCommand())
+                {
+                    cmd.CommandText = sql;
+                    if (paramList != null)
+                    {
+                        foreach (var k in paramList)
+                        {
+                            if (k.Value == null)
+                                cmd.Parameters.AddWithValue(k.Key, DBNull.Value);
+                            else
+                            {
+                                var pValue = k.Value;
+                                if (k.Value.GetType() == typeof(string))
+                                {
+                                    if (pValue.ToString().Contains("'"))
+                                    {
+                                        pValue = pValue.ToString().Replace("'", "`");
+                                    }
+                                }
+                                cmd.Parameters.AddWithValue(k.Key, pValue);
+                            }
+                        }
+                    }
+
+                    try
+                    {
+                        cmd.ExecuteNonQuery();
+                        return true;
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        public static DataTable Select(string sql, Dictionary<string, object> paramList,
+            bool debugging = false)
+        {
+            if (debugging)
+            {
+                string m = "";
+                if (paramList != null)
+                {
+                    foreach (var k in paramList)
+                    {
+                        m += $"{k.Key} - {k.Value} \r\n";
+                    }
+                }
+            }
+
+            using (SqlConnection connection = new SqlConnection(ConnStr))
+            {
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                using (SqlDataAdapter adp = new SqlDataAdapter(sql, connection))
+                {
+                    if (paramList != null)
+                    {
+                        foreach (var k in paramList)
+                        {
+                            if (k.Value == null)
+                                adp.SelectCommand.Parameters.AddWithValue(k.Key, DBNull.Value);
+                            else
+                            {
+                                var pValue = k.Value;
+                                if (k.Value.GetType() == typeof(string))
+                                {
+                                    if (pValue.ToString().Contains("'"))
+                                    {
+                                        pValue = pValue.ToString().Replace("'", "`");
+                                    }
+                                }
+                                adp.SelectCommand.Parameters.AddWithValue(k.Key, pValue);
+                            }
+                        }
+                    }
+
+                    try
+                    {
+                        DataTable dt = new DataTable();
+                        adp.Fill(dt);
+                        return dt;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+
+
+        public static DataSet Select2(string sql, Dictionary<string, object> paramList,
+           bool debugging = false)
+        {
+            if (debugging)
+            {
+                string m = "";
+                if (paramList != null)
+                {
+                    foreach (var k in paramList)
+                    {
+                        m += $"{k.Key} - {k.Value} \r\n";
+                    }
+                }
+            }
+
+            using (SqlConnection connection = new SqlConnection(ConnStr))
+            {
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                using (SqlDataAdapter adp = new SqlDataAdapter(sql, connection))
+                {
+                    if (paramList != null)
+                    {
+                        foreach (var k in paramList)
+                        {
+                            if (k.Value == null)
+                                adp.SelectCommand.Parameters.AddWithValue(k.Key, DBNull.Value);
+                            else
+                            {
+                                var pValue = k.Value;
+                                if (k.Value.GetType() == typeof(string))
+                                {
+                                    if (pValue.ToString().Contains("'"))
+                                    {
+                                        pValue = pValue.ToString().Replace("'", "`");
+                                    }
+                                }
+                                adp.SelectCommand.Parameters.AddWithValue(k.Key, pValue);
+                            }
+                        }
+                    }
+
+                    try
+                    {
+                        DataSet dt = new DataSet();
+                        adp.Fill(dt);
+                        return dt;
+                    }
+                    catch
+                    {
+                        return null;
+                    }
+                }
+            }
+        }
+    }
+}
